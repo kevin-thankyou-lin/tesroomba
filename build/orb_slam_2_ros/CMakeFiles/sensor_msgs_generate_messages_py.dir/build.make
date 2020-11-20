@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kevin/tesroomba/src
+CMAKE_SOURCE_DIR = /home/alexfeng2000/Desktop/tesroomba/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kevin/tesroomba/build
+CMAKE_BINARY_DIR = /home/alexfeng2000/Desktop/tesroomba/build
 
 # Utility rule file for sensor_msgs_generate_messages_py.
 
@@ -63,10 +63,10 @@ orb_slam_2_ros/CMakeFiles/sensor_msgs_generate_messages_py.dir/build: sensor_msg
 .PHONY : orb_slam_2_ros/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
 
 orb_slam_2_ros/CMakeFiles/sensor_msgs_generate_messages_py.dir/clean:
-	cd /home/kevin/tesroomba/build/orb_slam_2_ros && $(CMAKE_COMMAND) -P CMakeFiles/sensor_msgs_generate_messages_py.dir/cmake_clean.cmake
+	cd /home/alexfeng2000/Desktop/tesroomba/build/orb_slam_2_ros && $(CMAKE_COMMAND) -P CMakeFiles/sensor_msgs_generate_messages_py.dir/cmake_clean.cmake
 .PHONY : orb_slam_2_ros/CMakeFiles/sensor_msgs_generate_messages_py.dir/clean
 
 orb_slam_2_ros/CMakeFiles/sensor_msgs_generate_messages_py.dir/depend:
-	cd /home/kevin/tesroomba/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kevin/tesroomba/src /home/kevin/tesroomba/src/orb_slam_2_ros /home/kevin/tesroomba/build /home/kevin/tesroomba/build/orb_slam_2_ros /home/kevin/tesroomba/build/orb_slam_2_ros/CMakeFiles/sensor_msgs_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/alexfeng2000/Desktop/tesroomba/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/alexfeng2000/Desktop/tesroomba/src /home/alexfeng2000/Desktop/tesroomba/src/orb_slam_2_ros /home/alexfeng2000/Desktop/tesroomba/build /home/alexfeng2000/Desktop/tesroomba/build/orb_slam_2_ros /home/alexfeng2000/Desktop/tesroomba/build/orb_slam_2_ros/CMakeFiles/sensor_msgs_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : orb_slam_2_ros/CMakeFiles/sensor_msgs_generate_messages_py.dir/depend
 

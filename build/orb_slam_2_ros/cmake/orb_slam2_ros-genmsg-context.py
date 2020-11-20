@@ -1,7 +1,7 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
 messages_str = ""
-services_str = "/home/kevin/tesroomba/src/orb_slam_2_ros/srv/SaveMap.srv"
+services_str = "/home/alexfeng2000/Desktop/tesroomba/src/orb_slam_2_ros/srv/SaveMap.srv"
 pkg_name = "orb_slam2_ros"
 dependencies_str = "std_msgs"
 langs = "gencpp;geneus;genlisp;gennodejs;genpy"

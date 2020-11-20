@@ -1,0 +1,8 @@
+prefix=/home/alexfeng2000/Desktop/tesroomba/install
+
+Name: stdr_teleop
+Description: Description of stdr_teleop
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
