@@ -1,4 +1,4 @@
-prefix=/home/alexfeng2000/Desktop/tesroomba/devel
+prefix=/home/kevin/tesroomba/devel
 
 Name: stdr_teleop
 Description: Description of stdr_teleop

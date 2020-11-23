@@ -5,8 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/DBoW2.dir/orb_slam2/Thirdparty/DBoW2/DBoW2/ScoringObject.cpp.o"
   "CMakeFiles/DBoW2.dir/orb_slam2/Thirdparty/DBoW2/DUtils/Random.cpp.o"
   "CMakeFiles/DBoW2.dir/orb_slam2/Thirdparty/DBoW2/DUtils/Timestamp.cpp.o"
-  "/home/alexfeng2000/Desktop/tesroomba/src/orb_slam_2_ros/orb_slam2/Thirdparty/DBoW2/lib/libDBoW2.pdb"
-  "/home/alexfeng2000/Desktop/tesroomba/src/orb_slam_2_ros/orb_slam2/Thirdparty/DBoW2/lib/libDBoW2.so"
+  "/home/kevin/tesroomba/src/orb_slam_2_ros/orb_slam2/Thirdparty/DBoW2/lib/libDBoW2.pdb"
+  "/home/kevin/tesroomba/src/orb_slam_2_ros/orb_slam2/Thirdparty/DBoW2/lib/libDBoW2.so"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/orb_slam2_ros_generate_messages_lisp"
-  "/home/alexfeng2000/Desktop/tesroomba/devel/share/common-lisp/ros/orb_slam2_ros/srv/SaveMap.lisp"
+  "/home/kevin/tesroomba/devel/share/common-lisp/ros/orb_slam2_ros/srv/SaveMap.lisp"
 )
 
 # Per-language clean rules from dependency scanning.

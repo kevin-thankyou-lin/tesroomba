@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/orb_slam2_ros_rgbd.dir/ros/src/RGBDNode.cc.o"
   "CMakeFiles/orb_slam2_ros_rgbd.dir/ros/src/Node.cc.o"
-  "/home/alexfeng2000/Desktop/tesroomba/devel/lib/orb_slam2_ros/orb_slam2_ros_rgbd.pdb"
-  "/home/alexfeng2000/Desktop/tesroomba/devel/lib/orb_slam2_ros/orb_slam2_ros_rgbd"
+  "/home/kevin/tesroomba/devel/lib/orb_slam2_ros/orb_slam2_ros_rgbd.pdb"
+  "/home/kevin/tesroomba/devel/lib/orb_slam2_ros/orb_slam2_ros_rgbd"
 )
 
 # Per-language clean rules from dependency scanning.

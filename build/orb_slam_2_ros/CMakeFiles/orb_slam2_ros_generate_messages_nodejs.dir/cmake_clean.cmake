@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/orb_slam2_ros_generate_messages_nodejs"
-  "/home/alexfeng2000/Desktop/tesroomba/devel/share/gennodejs/ros/orb_slam2_ros/srv/SaveMap.js"
+  "/home/kevin/tesroomba/devel/share/gennodejs/ros/orb_slam2_ros/srv/SaveMap.js"
 )
 
 # Per-language clean rules from dependency scanning.

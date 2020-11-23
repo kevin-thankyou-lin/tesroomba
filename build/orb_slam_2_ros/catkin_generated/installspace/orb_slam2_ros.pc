@@ -1,4 +1,4 @@
-prefix=/home/alexfeng2000/Desktop/tesroomba/install
+prefix=/home/kevin/tesroomba/install
 
 Name: orb_slam2_ros
 Description: Description of orb_slam2_ros

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/alexfeng2000/Desktop/tesroomba/src
+CMAKE_SOURCE_DIR = /home/kevin/tesroomba/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/alexfeng2000/Desktop/tesroomba/build
+CMAKE_BINARY_DIR = /home/kevin/tesroomba/build
 
 # Utility rule file for geometry_msgs_generate_messages_cpp.
 
@@ -63,10 +63,10 @@ orb_slam_2_ros/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build: geometr
 .PHONY : orb_slam_2_ros/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
 
 orb_slam_2_ros/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/clean:
-	cd /home/alexfeng2000/Desktop/tesroomba/build/orb_slam_2_ros && $(CMAKE_COMMAND) -P CMakeFiles/geometry_msgs_generate_messages_cpp.dir/cmake_clean.cmake
+	cd /home/kevin/tesroomba/build/orb_slam_2_ros && $(CMAKE_COMMAND) -P CMakeFiles/geometry_msgs_generate_messages_cpp.dir/cmake_clean.cmake
 .PHONY : orb_slam_2_ros/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/clean
 
 orb_slam_2_ros/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/depend:
-	cd /home/alexfeng2000/Desktop/tesroomba/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/alexfeng2000/Desktop/tesroomba/src /home/alexfeng2000/Desktop/tesroomba/src/orb_slam_2_ros /home/alexfeng2000/Desktop/tesroomba/build /home/alexfeng2000/Desktop/tesroomba/build/orb_slam_2_ros /home/alexfeng2000/Desktop/tesroomba/build/orb_slam_2_ros/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/kevin/tesroomba/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kevin/tesroomba/src /home/kevin/tesroomba/src/orb_slam_2_ros /home/kevin/tesroomba/build /home/kevin/tesroomba/build/orb_slam_2_ros /home/kevin/tesroomba/build/orb_slam_2_ros/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : orb_slam_2_ros/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/depend
 

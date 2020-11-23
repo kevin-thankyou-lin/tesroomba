@@ -1,8 +1,0 @@
-prefix=/home/alexfeng2000/Desktop/tesroomba/install
-
-Name: stdr_launchers
-Description: Description of stdr_launchers
-Version: 0.3.2
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

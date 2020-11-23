@@ -1,2 +1,2 @@
-lab4_starter:orb_slam_2_ros:stdr_simulator/stdr_gui:stdr_simulator/stdr_launchers:stdr_simulator/stdr_msgs:stdr_simulator/stdr_parser:stdr_simulator/stdr_resources:stdr_simulator/stdr_robot:stdr_simulator/stdr_samples:stdr_simulator/stdr_server:stdr_simulator/stdr_simulator:stdr_teleop
--DCATKIN_DEVEL_PREFIX=/home/alexfeng2000/Desktop/tesroomba/devel -DCMAKE_INSTALL_PREFIX=/home/alexfeng2000/Desktop/tesroomba/install -G Unix Makefiles
+controller:orb_slam_2_ros:stdr_teleop
+-DCATKIN_DEVEL_PREFIX=/home/kevin/tesroomba/devel -DCMAKE_INSTALL_PREFIX=/home/kevin/tesroomba/install -G Unix Makefiles

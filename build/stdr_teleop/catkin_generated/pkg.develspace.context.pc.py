@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "stdr_teleop"
-PROJECT_SPACE_DIR = "/home/alexfeng2000/Desktop/tesroomba/devel"
+PROJECT_SPACE_DIR = "/home/kevin/tesroomba/devel"
 PROJECT_VERSION = "0.0.0"

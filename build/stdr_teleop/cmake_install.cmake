@@ -1,8 +1,8 @@
-# Install script for directory: /home/alexfeng2000/Desktop/tesroomba/src/stdr_teleop
+# Install script for directory: /home/kevin/tesroomba/src/stdr_teleop
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/alexfeng2000/Desktop/tesroomba/install")
+  set(CMAKE_INSTALL_PREFIX "/home/kevin/tesroomba/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,17 +33,17 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/alexfeng2000/Desktop/tesroomba/build/stdr_teleop/catkin_generated/installspace/stdr_teleop.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/kevin/tesroomba/build/stdr_teleop/catkin_generated/installspace/stdr_teleop.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/stdr_teleop/cmake" TYPE FILE FILES
-    "/home/alexfeng2000/Desktop/tesroomba/build/stdr_teleop/catkin_generated/installspace/stdr_teleopConfig.cmake"
-    "/home/alexfeng2000/Desktop/tesroomba/build/stdr_teleop/catkin_generated/installspace/stdr_teleopConfig-version.cmake"
+    "/home/kevin/tesroomba/build/stdr_teleop/catkin_generated/installspace/stdr_teleopConfig.cmake"
+    "/home/kevin/tesroomba/build/stdr_teleop/catkin_generated/installspace/stdr_teleopConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/stdr_teleop" TYPE FILE FILES "/home/alexfeng2000/Desktop/tesroomba/src/stdr_teleop/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/stdr_teleop" TYPE FILE FILES "/home/kevin/tesroomba/src/stdr_teleop/package.xml")
 endif()
 
