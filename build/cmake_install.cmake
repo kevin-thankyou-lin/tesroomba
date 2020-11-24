@@ -1,8 +1,8 @@
-# Install script for directory: /home/kevin/tesroomba/src
+# Install script for directory: /home/alexfeng2000/Desktop/tesroomba/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/kevin/tesroomba/install")
+  set(CMAKE_INSTALL_PREFIX "/home/alexfeng2000/Desktop/tesroomba/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -44,91 +44,101 @@ endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/kevin/tesroomba/install/_setup_util.py")
+   "/home/alexfeng2000/Desktop/tesroomba/install/_setup_util.py")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/kevin/tesroomba/install" TYPE PROGRAM FILES "/home/kevin/tesroomba/build/catkin_generated/installspace/_setup_util.py")
+file(INSTALL DESTINATION "/home/alexfeng2000/Desktop/tesroomba/install" TYPE PROGRAM FILES "/home/alexfeng2000/Desktop/tesroomba/build/catkin_generated/installspace/_setup_util.py")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/kevin/tesroomba/install/env.sh")
+   "/home/alexfeng2000/Desktop/tesroomba/install/env.sh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/kevin/tesroomba/install" TYPE PROGRAM FILES "/home/kevin/tesroomba/build/catkin_generated/installspace/env.sh")
+file(INSTALL DESTINATION "/home/alexfeng2000/Desktop/tesroomba/install" TYPE PROGRAM FILES "/home/alexfeng2000/Desktop/tesroomba/build/catkin_generated/installspace/env.sh")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/kevin/tesroomba/install/setup.bash;/home/kevin/tesroomba/install/local_setup.bash")
+   "/home/alexfeng2000/Desktop/tesroomba/install/setup.bash;/home/alexfeng2000/Desktop/tesroomba/install/local_setup.bash")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/kevin/tesroomba/install" TYPE FILE FILES
-    "/home/kevin/tesroomba/build/catkin_generated/installspace/setup.bash"
-    "/home/kevin/tesroomba/build/catkin_generated/installspace/local_setup.bash"
+file(INSTALL DESTINATION "/home/alexfeng2000/Desktop/tesroomba/install" TYPE FILE FILES
+    "/home/alexfeng2000/Desktop/tesroomba/build/catkin_generated/installspace/setup.bash"
+    "/home/alexfeng2000/Desktop/tesroomba/build/catkin_generated/installspace/local_setup.bash"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/kevin/tesroomba/install/setup.sh;/home/kevin/tesroomba/install/local_setup.sh")
+   "/home/alexfeng2000/Desktop/tesroomba/install/setup.sh;/home/alexfeng2000/Desktop/tesroomba/install/local_setup.sh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/kevin/tesroomba/install" TYPE FILE FILES
-    "/home/kevin/tesroomba/build/catkin_generated/installspace/setup.sh"
-    "/home/kevin/tesroomba/build/catkin_generated/installspace/local_setup.sh"
+file(INSTALL DESTINATION "/home/alexfeng2000/Desktop/tesroomba/install" TYPE FILE FILES
+    "/home/alexfeng2000/Desktop/tesroomba/build/catkin_generated/installspace/setup.sh"
+    "/home/alexfeng2000/Desktop/tesroomba/build/catkin_generated/installspace/local_setup.sh"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/kevin/tesroomba/install/setup.zsh;/home/kevin/tesroomba/install/local_setup.zsh")
+   "/home/alexfeng2000/Desktop/tesroomba/install/setup.zsh;/home/alexfeng2000/Desktop/tesroomba/install/local_setup.zsh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/kevin/tesroomba/install" TYPE FILE FILES
-    "/home/kevin/tesroomba/build/catkin_generated/installspace/setup.zsh"
-    "/home/kevin/tesroomba/build/catkin_generated/installspace/local_setup.zsh"
+file(INSTALL DESTINATION "/home/alexfeng2000/Desktop/tesroomba/install" TYPE FILE FILES
+    "/home/alexfeng2000/Desktop/tesroomba/build/catkin_generated/installspace/setup.zsh"
+    "/home/alexfeng2000/Desktop/tesroomba/build/catkin_generated/installspace/local_setup.zsh"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/kevin/tesroomba/install/.rosinstall")
+   "/home/alexfeng2000/Desktop/tesroomba/install/.rosinstall")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/kevin/tesroomba/install" TYPE FILE FILES "/home/kevin/tesroomba/build/catkin_generated/installspace/.rosinstall")
+file(INSTALL DESTINATION "/home/alexfeng2000/Desktop/tesroomba/install" TYPE FILE FILES "/home/alexfeng2000/Desktop/tesroomba/build/catkin_generated/installspace/.rosinstall")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/kevin/tesroomba/build/gtest/cmake_install.cmake")
-  include("/home/kevin/tesroomba/build/stdr_teleop/cmake_install.cmake")
-  include("/home/kevin/tesroomba/build/orb_slam_2_ros/cmake_install.cmake")
-  include("/home/kevin/tesroomba/build/controller/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/gtest/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_simulator/stdr_launchers/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_simulator/stdr_msgs/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_simulator/stdr_resources/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_simulator/stdr_simulator/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/lab4_starter/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_simulator/stdr_parser/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_teleop/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/orb_slam_2_ros/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_simulator/stdr_robot/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_simulator/stdr_samples/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_simulator/stdr_server/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/stdr_simulator/stdr_gui/cmake_install.cmake")
+  include("/home/alexfeng2000/Desktop/tesroomba/build/controller/cmake_install.cmake")
 
 endif()
 
@@ -140,5 +150,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/kevin/tesroomba/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/alexfeng2000/Desktop/tesroomba/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

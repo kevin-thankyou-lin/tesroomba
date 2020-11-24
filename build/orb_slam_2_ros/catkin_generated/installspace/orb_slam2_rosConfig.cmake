@@ -67,14 +67,14 @@ set(orb_slam2_ros_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(orb_slam2_ros_SOURCE_PREFIX /home/kevin/tesroomba/src/orb_slam_2_ros)
-  set(orb_slam2_ros_DEVEL_PREFIX /home/kevin/tesroomba/devel)
+  set(orb_slam2_ros_SOURCE_PREFIX /home/alexfeng2000/Desktop/tesroomba/src/orb_slam_2_ros)
+  set(orb_slam2_ros_DEVEL_PREFIX /home/alexfeng2000/Desktop/tesroomba/devel)
   set(orb_slam2_ros_INSTALL_PREFIX "")
   set(orb_slam2_ros_PREFIX ${orb_slam2_ros_DEVEL_PREFIX})
 else()
   set(orb_slam2_ros_SOURCE_PREFIX "")
   set(orb_slam2_ros_DEVEL_PREFIX "")
-  set(orb_slam2_ros_INSTALL_PREFIX /home/kevin/tesroomba/install)
+  set(orb_slam2_ros_INSTALL_PREFIX /home/alexfeng2000/Desktop/tesroomba/install)
   set(orb_slam2_ros_PREFIX ${orb_slam2_ros_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/kevin/tesroomba/install/lib;/home/kevin/ros_workspaces/lab8/devel/lib;/home/kevin/rethink_ws/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/alexfeng2000/Desktop/tesroomba/install/lib;/home/alexfeng2000/Desktop/tesroomba/devel/lib;/home/alexfeng2000/rethink_ws/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

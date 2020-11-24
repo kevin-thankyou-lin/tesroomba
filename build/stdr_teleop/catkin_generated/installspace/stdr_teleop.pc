@@ -1,4 +1,4 @@
-prefix=/home/kevin/tesroomba/install
+prefix=/home/alexfeng2000/Desktop/tesroomba/install
 
 Name: stdr_teleop
 Description: Description of stdr_teleop

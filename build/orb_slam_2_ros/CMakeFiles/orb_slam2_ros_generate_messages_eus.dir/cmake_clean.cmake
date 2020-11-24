@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/orb_slam2_ros_generate_messages_eus"
-  "/home/kevin/tesroomba/devel/share/roseus/ros/orb_slam2_ros/srv/SaveMap.l"
-  "/home/kevin/tesroomba/devel/share/roseus/ros/orb_slam2_ros/manifest.l"
+  "/home/alexfeng2000/Desktop/tesroomba/devel/share/roseus/ros/orb_slam2_ros/srv/SaveMap.l"
+  "/home/alexfeng2000/Desktop/tesroomba/devel/share/roseus/ros/orb_slam2_ros/manifest.l"
 )
 
 # Per-language clean rules from dependency scanning.

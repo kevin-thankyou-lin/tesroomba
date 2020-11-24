@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/orb_slam2_ros_generate_messages_py"
-  "/home/kevin/tesroomba/devel/lib/python2.7/dist-packages/orb_slam2_ros/srv/_SaveMap.py"
-  "/home/kevin/tesroomba/devel/lib/python2.7/dist-packages/orb_slam2_ros/srv/__init__.py"
+  "/home/alexfeng2000/Desktop/tesroomba/devel/lib/python2.7/dist-packages/orb_slam2_ros/srv/_SaveMap.py"
+  "/home/alexfeng2000/Desktop/tesroomba/devel/lib/python2.7/dist-packages/orb_slam2_ros/srv/__init__.py"
 )
 
 # Per-language clean rules from dependency scanning.
