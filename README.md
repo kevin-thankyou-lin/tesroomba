@@ -18,7 +18,7 @@ To create our own camera sensors reference: http://gazebosim.org/tutorials?tut=r
 
 Alex's current implementation: 
 
-In turtlebot_gazebo.urdf.xacro, which is located in library turtlebot_gazebo: 
+In turtlebot_gazebo.urdf.xacro, which is located in library turtlebot_description: 
 
 ```
 <?xml version="1.0"?>
