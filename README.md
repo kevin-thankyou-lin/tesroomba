@@ -19,7 +19,8 @@ To create our own camera sensors reference: http://gazebosim.org/tutorials?tut=r
 Alex's current implementation: 
 
 In turtlebot_gazebo.urdf.xacro, which is located in library turtlebot_gazebo: 
----
+
+```
 <?xml version="1.0"?>
 <robot name="turtlebot_gazebo" xmlns:xacro="http://ros.org/wiki/xacro">
   <!-- Microsoft Kinect / ASUS Xtion PRO Live for simulation -->
@@ -106,14 +107,13 @@ In turtlebot_gazebo.urdf.xacro, which is located in library turtlebot_gazebo:
     </sensor>
   </gazebo>
 </robot>
-
----
+```
 
 You will also need to download plugins via sudo apt-get install libgazebo7-dev
 
 Kinect.urdf.xacro will have the following:
 
----
+```
 <?xml version="1.0"?>
 <robot name="sensor_kinect" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find turtlebot_description)/urdf/turtlebot_gazebo.urdf.xacro"/>
@@ -207,12 +207,9 @@ Kinect.urdf.xacro will have the following:
 	<!-- <turtlebot_sim_3dsensor/> -->
   </xacro:macro>
 </robot>
-
-
----
+```
 
 To change the topics being published, use a remap.
-
 
 
 
