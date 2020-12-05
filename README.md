@@ -25,8 +25,7 @@ To run the current floor plan, after *source/devel/setup.bash* and the editing t
 ---
 ***roslaunch turtlebot_gazebo turtlebot_world.launch world_file:=$(rospack find jump_start)/worlds/my_world.sdf***
 
-
-In turtlebot_gazebo.urdf.xacro, which is located in library turtlebot_gazebo: 
+In turtlebot_gazebo.urdf.xacro, which is located in library turtlebot_description: 
 
 ```
 <?xml version="1.0"?>
