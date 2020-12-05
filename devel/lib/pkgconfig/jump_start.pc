@@ -1,0 +1,8 @@
+prefix=/home/alexfeng2000/Desktop/tesroomba/devel
+
+Name: jump_start
+Description: Description of jump_start
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
