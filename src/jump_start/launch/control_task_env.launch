@@ -1,0 +1,31 @@
+<launch>
+	<arg name="x" default="1" />	
+	<arg name="y" default="2" />
+	<arg name="theta" default="0" />
+
+	<include file="$(find stdr_robot)/launch/robot_manager.launch" />
+	
+	<node type="stdr_server_node" 
+	      pkg="stdr_server" 
+	      name="stdr_server" 
+              output="screen" 
+              args="$(find lab4_starter)/maps/control_task_map.yaml"/>
+
+	<node pkg="tf" 
+              type="static_transform_publisher" 
+              name="world2map" 
+              args="0 0 0 0 0 0  world map 100" />
+	
+	<node pkg="tf" 
+              type="static_transform_publisher" 
+              name="world2target" 
+              args="5 5 0 0 0 0  world target 100" />
+
+	<include file="$(find stdr_gui)/launch/stdr_gui.launch"/>
+	
+	<node pkg="stdr_robot" 
+              type="robot_handler" 
+              name="$(anon robot_spawn)" 
+              args="add $(find lab4_starter)/robots/robot_no_sensors.yaml $(arg x) $(arg y) $(arg theta)" />
+
+</launch>
