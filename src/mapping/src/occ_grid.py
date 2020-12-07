@@ -1,7 +1,11 @@
+#!/usr/bin/python
 import rospy
-import tf2_ros as tf
+import tf2_ros
 import tf
-
+import numpy as np
+import ros_numpy
+from visualization_msgs.msg import Marker
+from nav_msgs.msg import OccupancyGrid
 from sensor_msgs.msg import PointCloud2
 from geometry_msgs.msg import Point
 
@@ -9,7 +13,8 @@ HEIGHT_THRESHOLD = 1
 
 class OccupancyGrid2d(object):
     def __init__(self, pointcloud_topic, x_num, y_num, occupied_update, occupied_threshold, 
-        vis_topic, x_max = 25, x_min = -25, y_max = 25, y_min = -25):
+        grid_topic, vis_topic, x_max = 25, x_min = -25, y_max = 25, y_min = -25):
+        self._name = rospy.get_name() + "/grid_map_2d"
         self._x_num = x_num
         self._y_num = y_num
         self._x_max = x_max
@@ -25,7 +30,8 @@ class OccupancyGrid2d(object):
         self._map = np.zeros((self._x_num, self._y_num))
         self._pointcloud_topic = pointcloud_topic
         self._vis_topic = vis_topic
-
+        self._grid_topic = grid_topic
+        self.RegisterCallbacks()
 
     def RegisterCallbacks(self):
         # Subscriber.
@@ -33,21 +39,27 @@ class OccupancyGrid2d(object):
                                             PointCloud2,
                                             self.update_grid,
                                             queue_size=1)
-
         # Publisher.
         self._vis_pub = rospy.Publisher(self._vis_topic,
                                         Marker,
                                         queue_size=10)
-
+        self._grid_pub = rospy.Publisher(self._grid_topic, OccupancyGrid, queue_size = 10)
         return True
 
 
     def update_grid(self, msg):
-        for p in msg.points:
-            if p.y <= HEIGHT_THRESHOLD:
-                grid_point = self.PointToVoxel(p.x, p.y)
+        xyz_array = ros_numpy.point_cloud2.pointcloud2_to_xyz_array(msg)
+        #print(xyz_array)
+        #pose = self._tf_buffer.lookup_transform(self._fixed_frame, self._sensor_frame, rospy.Time())
+        #ros_pcl transform_pointcloud might be more efficient than transforming eadh point
+        for i in range(len(xyz_array)):
+            if xyz_array[i, 2]  <= HEIGHT_THRESHOLD:
+                grid_point = self.PointToVoxel(xyz_array[i, 0], xyz_array[i, 1])
                 self._map += self._occupied_update
-
+        
+        g = OccupancyGrid()
+        g.data = (self.LogOddsToProbability(self._map) * 100).astype(np.int8)
+        self._grid_pub.publish(g)
 
     # Convert (x, y) coordinates in fixed frame to grid coordinates.
     def PointToVoxel(self, x, y):
