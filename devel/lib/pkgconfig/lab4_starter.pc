@@ -1,8 +1,0 @@
-prefix=/home/alexfeng2000/Desktop/tesroomba/devel
-
-Name: lab4_starter
-Description: Description of lab4_starter
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
