@@ -42,8 +42,9 @@
       </sensor>
     </gazebo>
   </xacro:macro> -->
-  <gazebo reference="camera_link1">
-     <sensor type="camera" name="camera1">
+<xacro:macro name="turtlebot_sim_3dsensor">
+ <gazebo reference="oleft">
+     <sensor type="camera" name="camera_left">
        <update_rate>30.0</update_rate>
         <camera name="head">
           <horizontal_fov>1.3962634</horizontal_fov>
@@ -66,13 +67,12 @@
           </noise>
         </camera>
        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-         <cameraName>camera1</cameraName>
+         <cameraName>left</cameraName>
          <alwaysOn>true</alwaysOn>
          <updateRate>0.0</updateRate>
-         <cameraName>camera1</cameraName>
          <imageTopicName>image_raw</imageTopicName>
-         <cameraInfoTopicName>camera1_info</cameraInfoTopicName>
-         <frameName>camera1_link</frameName>
+         <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+         <frameName>left</frameName>
          <hackBaseline>0.07</hackBaseline>
          <distortionK1>0.0</distortionK1>
          <distortionK2>0.0</distortionK2>
@@ -84,8 +84,8 @@
    </gazebo>
 
 
- <gazebo reference="camera_link2">
-   <sensor type="camera" name="camera2">
+ <gazebo reference="right">
+   <sensor type="camera" name="camera_right">
      <update_rate>30.0</update_rate>
       <camera name="head">
         <horizontal_fov>1.3962634</horizontal_fov>
@@ -108,13 +108,12 @@
         </noise>
       </camera>
      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-       <cameraName>camera2</cameraName>
+       <cameraName>right</cameraName>
        <alwaysOn>true</alwaysOn>
        <updateRate>0.0</updateRate>
-       <cameraName>camera2</cameraName>
        <imageTopicName>image_raw</imageTopicName>
-       <cameraInfoTopicName>camera2_info</cameraInfoTopicName>
-       <frameName>camera2_link</frameName>
+       <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+       <frameName>right</frameName>
        <hackBaseline>0.07</hackBaseline>
        <distortionK1>0.0</distortionK1>
        <distortionK2>0.0</distortionK2>
@@ -122,6 +121,8 @@
        <distortionT1>0.0</distortionT1>
        <distortionT2>0.0</distortionT2>
      </plugin>
-   </sensor>
+   </sensor> 
  </gazebo>
+</xacro:macro> 
+
 </robot>
