@@ -3,12 +3,12 @@
         <param name="resolution" value="0.05" />
 
         <!-- fixed map frame -->
-        <param name="frame_id" type="string" value="map" />
+        <param name="frame_id" type="string" value="odom" />
 	
 	<param name="sensor_model/max_range" value="5.0" />
 
         <!-- data source to integrate (PointCloud2) -->
-        <remap from="cloud_in" to="/camera/depth/points" />
+        <remap from="cloud_in" to="points2" />
 
 
     </node>
