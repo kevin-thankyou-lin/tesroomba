@@ -13,6 +13,6 @@ import sys
 if __name__ == "__main__":
     rospy.init_node("mapping_node")
 
-    og = OccupancyGrid2d("node/map_points", 50, 50, 0.5, 0.75, "occ_grid/vis")
+    og = OccupancyGrid2d("/node/map_points", 50, 50, 0.5, 0.75, "occ_grid/grid", "occ_grid/vis")
     
     rospy.spin()
