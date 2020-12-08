@@ -1,2 +1,0 @@
-controller:jump_start:lab4_starter:orb_slam_2_ros:stdr_teleop
--DCATKIN_DEVEL_PREFIX=/home/alexfeng2000/Desktop/tesroomba/devel -DCMAKE_INSTALL_PREFIX=/home/alexfeng2000/Desktop/tesroomba/install -G Unix Makefiles
