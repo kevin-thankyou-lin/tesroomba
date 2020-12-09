@@ -1,6 +1,14 @@
 # from Collections import deque
-from geometry_msgs.msg import Twist
+from std_msgs.msg import Header
+# from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import Pose, Point, Quaternion, Twist
+
 from nav_msgs.msg import OccupancyGrid
+from actionlib_msgs.msg import *
+import actionlib
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+
+import rospy
 import tf2_ros
 import sys
 
@@ -46,6 +54,19 @@ class Explorer:
         self.pub = rospy.Publisher('/cmd_vel_mux/input/teleop', Twist, queue_size=10)
         self.sub = rospy.Subscriber('/rtabmap/octomap_grid', OccupancyGrid, queue_size=10)
         self.angular_vel = angular_vel
+        self.goalID = 0
+
+        # Create action client
+        self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+        rospy.loginfo("Waiting for move_base action server...")
+        wait = self.move_base.wait_for_server(rospy.Duration(50.0))
+        if not wait:
+            rospy.logerr("Action server not available!")
+            rospy.signal_shutdown("Action server not available!")
+            return
+        rospy.loginfo("Connected to move base server")
+        rospy.loginfo("Starting goals achievements ...")
+
 
     def rotate(self):
         twistMsg = Twist() 
@@ -59,25 +80,51 @@ class Explorer:
 
         # time to stop rotation
         end_t = rospy.Time.now() + rospy.Duration(10)
+
+        print("start rotating")
         while not rospy.is_shutdown() and rospy.Time.now() < end_t: 
             self.pub.publish(twistMsg)
-        
         # stop rotation
         twistMsg.angular.z = 0
         self.pub.publish(twistMsg)
+        print("finish rotating")
+
         return True
 
+    def move(self, goal):
+        """Move to goal"""
+        self.move_base.send_goal(goal)
+        
+        # Allow 1 minute to get there
+        finished_within_time = self.move_base.wait_for_result(rospy.Duration(30)) 
+        
+        # If we don't get there in time, abort the goal
+        if not finished_within_time:
+            self.move_base.cancel_goal()
+            rospy.loginfo("Timed out achieving goal")
+        else:
+            # We made it!
+            state = self.move_base.get_state()
+            if state == GoalStatus.SUCCEEDED:
+                self.goalID += 1
+                rospy.loginfo("Initial goal published! Goal ID is: %d", self.goalId) 
 
     def explore(self):
         done = False
         while not rospy.is_shutdown() and not done:
             self.rotate()
-            print("rotated once")
-            self.occ_grid.getNearestFrontierCentroid()
-            # poseStamp = geometry_msgs.msg.PoseStamped()
-            # TODO populate poseStamp entries
-            # pub.publish(poseStamp)
+            # expecting grid world to be updated for me to go planning
+            goal_x, goal_y = self.occ_grid.getNearestFrontierCentroid()
+            goal_x, goal_y = -1, -1
 
+            # create Pose
+
+            # Set up the goal location
+            goal = MoveBaseGoal()
+            goal.target_pose.pose = Pose(Point(goal_x, goal_y, 0), Quaternion(0, 0, 0, 0))
+            goal.target_pose.header.frame_id = 'map'
+            goal.target_pose.header.stamp = rospy.Time.now()
+            self.move(goal)
 
     def occgrid_callback(self, grid):
         import ipdb;ipdb.set_trace()
