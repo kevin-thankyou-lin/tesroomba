@@ -3,9 +3,9 @@
 
   <arg name="manager" /> <!-- Must be globally qualified -->
   <arg name="respawn" default="false" />
-  <arg name="left" default="left" />
-  <arg name="right" default="right" />
-  <arg name="approximate_sync" default="false" />
+  <arg name="left" default="/stereo/camera/left" />
+  <arg name="right" default="/stereo/camera/right" />
+  <arg name="approximate_sync" default="true" />
 
   <arg     if="$(arg respawn)" name="bond" value="" />
   <arg unless="$(arg respawn)" name="bond" value="--no-bond" />
@@ -38,9 +38,9 @@
     <param name="approximate_sync" value="$(arg approximate_sync)" />
   </node>
 
-  <remap from="/left/image_raw" to="/left/image_raw" />
-  <remap from="/right/image_raw" to="/right/image_raw" />
-  <remap from="/left/camera_info" to="/left/camera_info" />
-  <remap from="/right/camera_info" to="/right/camera_info" />
+  <remap from="/left/image_raw" to="/stereo/camera/left/image_raw" />
+  <remap from="/right/image_raw" to="/stereo/camera/right/image_raw" />
+  <remap from="/left/camera_info" to="/stereo/camera/left/camera_info" />
+  <remap from="/right/camera_info" to="/stereo/camera/right/camera_info" />
 
 </launch>
