@@ -18,6 +18,9 @@ ros-kinetic-turtlebot-rviz-launchers**
 
 
 For orbslam2 submodule, use https://github.com/appliedAI-Initiative/orb_slam_2_ros
+**NOTE: we're no longer using orbslam2 since it's a feature based slam.**
+
+For rtabmap_ros (the slam algorithm we're using), look here: http://wiki.ros.org/rtabmap_ros
 
 To download octomap, use https://github.com/OctoMap/octomap
 
@@ -40,9 +43,9 @@ To create our own sensors (like cameras) reference: http://gazebosim.org/tutoria
 To run the current floor plan, after *source/devel/setup.bash* and the editing the corresponding files (look below), run
 
 ```
-***export  TURTLEBOT_3D_SENSOR=custom***
+export  TURTLEBOT_3D_SENSOR=custom
 
-***roslaunch jump_start turtlebot_world.launch world_file:=$(rospack find jump_start)/worlds/my_world.sdf***
+roslaunch jump_start turtlebot_world.launch world_file:=$(rospack find jump_start)/worlds/my_world.sdf
 ```
 
 To change the topics being published, use a remap.
@@ -78,6 +81,71 @@ So the issue with orb_slam2 is that it's a feature extractor, which means it doe
 
 I will be trying different slam algorithms tonight and try to get a controller up and running. We're also using a turtlebot instead of a actual roomba, which might be bad? I can't get a roomba to work in simulation unfortunately. It's stupidly difficult for no reason.
 
+## 12/8/20
+
+### Update
+
+So we've decided to go with **rtabmap_ros** since orb_slam2 was just not cutting it for some reason. We wrote a wrapper for our camera around the turtlebot and now it's working pretty well. 
+
+As far as commands go:
+
+```
+export  TURTLEBOT_3D_SENSOR=custom
+
+roslaunch jump_start turtlebot_world.launch world_file:=$(rospack find jump_start)/worlds/my_world.sdf
+```
+in one terminal for world launching. 
+
+```
+roslaunch jump_start image_proc.launch
+```
+for image processing/rectification.
+```
+roslaunch rtabmap_ros stereo_mapping.launch.
+```
+
+Teleoperation is the same, and you'll also have to modify some of the parameters in **stereo_mapping.launch**.
+
+Here are the parameters in **stereo_mapping.launch**:
+
+```
+  <arg name="rtabmapviz"              default="true" />
+  <arg name="rviz"                    default="false" />
+
+  <!-- Localization-only mode -->
+  <arg name="localization"            default="false"/>
+
+  <!-- Corresponding config files -->
+  <arg name="rtabmapviz_cfg"          default="$(find rtabmap_ros)/launch/config/rgbd_gui.ini" />
+  <arg name="rviz_cfg"                default="$(find rtabmap_ros)/launch/config/rgbd.rviz" />
+
+  <arg name="frame_id"                default="left"/>     <!-- Fixed frame id, you may set "base_link" or "base_footprint" if they are published -->
+  <arg name="database_path"           default="~/.ros/rtabmap.db"/>
+  <arg name="rtabmap_args"            default=""/>   <!-- delete_db_on_start, udebug -->
+  <arg name="launch_prefix"           default=""/>
+  <arg name="approx_sync"             default="true"/>         <!-- if timestamps of the input topics are not synchronized -->
+
+  <arg name="stereo_namespace"        default=""/>
+  <arg name="left_image_topic"        default="/stereo/camera/left/image_rect_color" />
+  <arg name="right_image_topic"       default="/stereo/camera/right/image_rect" />      <!-- using grayscale image for efficiency -->
+  <arg name="left_camera_info_topic"  default="/stereo/camera/left/camera_info" />
+  <arg name="right_camera_info_topic" default="/stereo/camera/right/camera_info" />
+  <arg name="compressed"              default="false"/>
+
+  <arg name="subscribe_scan"          default="false"/>         <!-- Assuming 2D scan if set, rtabmap will do 3DoF mapping instead of 6DoF -->
+  <arg name="scan_topic"              default="/scan"/>
+
+  <arg name="subscribe_scan_cloud"    default="false"/>         <!-- Assuming 3D scan if set -->
+  <arg name="scan_cloud_topic"        default="/scan_cloud"/>
+
+  <arg name="visual_odometry"         default="false"/>          <!-- Generate visual odometry -->
+  <arg name="odom_topic"              default="/odom"/>         <!-- Odometry topic used if visual_odometry is false -->
+  <arg name="odom_frame_id"           default="/odom"/>              <!-- If set, TF is used to get odometry instead of the topic -->
+
+  <arg name="namespace"               default="rtabmap"/>
+  <arg name="wait_for_transform"      default="0.2"/>
+  <arg name="queue_size"              default="100"/>
+  ```
 
 
 
