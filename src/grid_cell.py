@@ -1,5 +1,5 @@
 class GridCell:
-    def __init__(self, x=None, y=None, prob=-1, isOnFrontier=None, frontierClass=None):
+    def __init__(self, x=None, y=None, prob=-1, isOnFrontier=False, frontierClass=None):
         self.x = x
         self.y = y
         self.prob = prob
@@ -30,3 +30,4 @@ class GridCell:
 
     def getProb(self):
         return self.prob
+

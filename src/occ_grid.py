@@ -1,4 +1,5 @@
 from grid_cell import GridCell
+from collections import queue
 
 class OccGrid:
     def __init__(self):
@@ -8,6 +9,8 @@ class OccGrid:
         self.height = None
         self.origin = None
         self.id_to_frontier_pts = dict()
+        self.num_frontier_pts = 0
+        self.neighbor_idxs = [(x, y) for x in [-1, 0, 1] for y in [-1, 0, -1]]
         self.occ_grid_2d = []
     
     def loadGridMetadata(self, grid_msg):
@@ -69,7 +72,7 @@ class OccGrid:
                 for w in range(-1, 2):
                     new_h = x + h
                     new_w = y + w
-                    if 0 <= new_h < self.height and 0 <= new_w < self.height and 10 >= self.occ_grid_2d[new_h][new_w].getProb() == -1:
+                    if 0 <= new_h < self.height and 0 <= new_w < self.height <= 10 and self.occ_grid_2d[new_h][new_w].getProb() == -1:
                         num_unknown_neighbors += 1
             return num_unknown_neighbors > 0
         else:
@@ -80,35 +83,69 @@ class OccGrid:
         Sets if a grid cell is a frontier for all points in grid
         Returns the number of frontier points
         """
-        num_frontiers = 0
+        frontiers = set()
+
         for h in range(self.height):
             for w in range(self.width):
-                if self.occ_grid[h][w].getProb() == -1:
-                    isOnFrontier = self.isFrontier(h, w)
-                    occupancyMap[h][w].setIsOnFrontier(isOnFrontier)
-      
-        if isOnFrontier:
-            num_frontiers += 1
-      
-        return num_frontiers
+                if self.occ_grid[h][w].getProb() == 0 and self.isFrontier(h, w):
+                    occupancyMap[h][w].setIsOnFrontier(True)
+                    c.append(occupancyMap[h][w])
+        self.num_frontier_pts = len(frontiers)
+        return frontiers
 
     def classifyFrontiers(self):
         """
-        Goes through all grid cells and gives cells a frontier class ID
+        Assigns class ID to all grid cells 
+        @Return
+        dict: {int: list[GridCell]} 
+            dict mapping an ID to list of all grid cells with that ID
         """
+        res = {0:[]}
         class_id = 0
-        for h in range(self.height):
-            for w in range(self.width):
-                if self.occ_grid[h][w].getProb() == -1:
-                    isOnFrontier = self.isFrontier(h, w)
-                    occupancyMap[h][w].setIsOnFrontier(isOnFrontier)
-        return
+        frontiers = self.getFrontierPoints()
+        for f in frontiers:
+            q = queue([])
+            #  q invariant: everyone added must be a frontier with its class not assigned yet
+            if f.getFrontierClass() != None:
+                continue
+
+            q.append(f)
+            class_lst = res[class_id]
+            # if curr pt doesn't have a class, 
+            while q:
+                curr_f = q.popleft()
+                curr_f.setFrontierClass(class_id)
+                class_lst.append(class_id)
+                neighbors = self.getNeighbors(curr_f.getXY()[0], curr_f.getXY()[1])
+                for nei in neighbors:
+                    if nei in frontiers and nei.getFrontierClass == None:
+                        q.append(nei)
+            
+            class_id += 1
+            res[class_id] = []
+
+        self.id_to_frontier_pts = res
+        return res
+
+    def getNeighbors(self, h, w):
+        res = []
+        for dh, dw in self.neighbor_idxs: # can optimize this 
+            if 0 <= dh + h < self.height and 0 <= dw + w < self.width:
+                nei = occupancyMap[dh + h][dw + w]
+                res.append(nei) 
+        return res
 
     def getFrontierCentroids(self):
-        x, y = 0, 0
+        
+        res = []
+        for id, vals in self.id_to_frontier_pts:
+            sum_x, sum_y = 0, 0
+            for vx, vy in vals:
+                sum_x += vx
+                sum_y += vy
+            res.append((sum_x / len(vals), sum_y / len(vals)))
 
-
-        return x, y
+        return res
 
     def getFrontierCentroidsWorld(self):
         grid_x, grid_y = self.getFrontierCentroid()
@@ -134,7 +171,7 @@ class OccGrid:
         world_y = origin_y + grid_y * self.resolution # not sure how grid_x and grid_y are relative to origin?
         return (world_x, world_y)
 
-    def getClosestFrontierCentroid(self, src_x, src_y):
+    def getClosestFrontierCentroidWorld(self, src_x, src_y):
         """
         @Params
         src_x:

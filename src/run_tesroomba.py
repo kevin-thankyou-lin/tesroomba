@@ -13,16 +13,20 @@ import rospy
 import tf2_ros
 import sys
 import tf
-from tf import TransformListener
 
-class Explorer:
+import matplotlib.pyplot as plt
+
+WORLD_FRAME = "odom"
+STOPPING_FRONTIER_PTS_NUM = 5
+
+class TesRoo:
     def __init__(self, angular_vel=0.2):
         self.occ_grid = OccGrid()
         self.pub = rospy.Publisher('/cmd_vel_mux/input/teleop', Twist, queue_size=10)
         self.sub = rospy.Subscriber('/map', OccupancyGrid, self.occ_grid.readOccupancyGrid, queue_size=10)
         self.angular_vel = angular_vel
         self.goalID = 0
-        self.tf_listener_ = TransformListener()
+        self.tf_listener = tf.TransformListener()
 
         # # Create action client
         self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
@@ -44,7 +48,6 @@ class Explorer:
         twistMsg.angular.y = 0
         twistMsg.angular.z = self.angular_vel    # set angular velocity
 
-        # time to stop rotation
         end_t = rospy.Time.now() + rospy.Duration(10)
 
         print("start rotating")
@@ -57,45 +60,33 @@ class Explorer:
 
         return True
 
-    def move(self, goal):
-        """Move to goal"""
-        
-        listener = tf.TransformListener()
-        import ipdb;ipdb.set_trace()
+    def curr_robo_coords(self, world_frame, robo_frame):
+        """Return x, y, z of robo w.r.t world_frame"""
         try:
-            (trans,rot) = listener.lookupTransform("odom", "base_link", rospy.Time(0))
+            (trans, rot) = self.tf_listener.lookupTransform(world_frame, robo_frame, rospy.Time(0))
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             print("Move failed :)")
-        pose = PoseStamped()
-        pose.header.frame_id = "map"
-        import ipdb;ipdb.set_trace()
-        pose.pose.orientation.w = 1.0    # Neutral orientation
-        pose_in_map = self.tf_listener_.transformPose("/base_link", p1)
-        print "Position of the fingertip in the robot base:"
-        print p_in_base
+
+        return trans 
+
+    def move(self, goal, world_frame):
+        """Move to goal, where goal is specified w.r.t the world frame"""
+
+        robo_x, robo_y, _ = self.curr_robo_coords("odom", "base_link")
+        # get a bunch of waypoints using A* on the instantaneous occupancy grid
 
 
     def explore(self):
         done = False
         while not rospy.is_shutdown() and not done:
-            # self.rotate()
-            # expecting grid world to be updated for me to go planning
-            # goal_x, goal_y = self.occ_grid.getNearestFrontierCentroidWorld()
-            goal_x, goal_y = -1, -1 # HARDCODED
-
-            # create Pose
-
-            # Set up the goal location
-            goal = None
-            # goal.target_pose.pose = Pose(Point(goal_x, goal_y, 0), Quaternion(0, 0, 0, 0))
-            # goal.target_pose.header.frame_id = 'map'
-            # goal.target_pose.header.stamp = rospy.Time.now()
+            self.rotate()
+            goal = (goal_x, goal_y) = self.occ_grid.getClosestFrontierCentroidWorld()
             self.move(goal)
+            done = self.occ_grid.num_frontier_pts < STOPPING_FRONTIER_PTS_NUM
 
     def occgrid_callback(self, grid):
         import ipdb;ipdb.set_trace()
         print(grid)
-
 
     def vacuum():
         pub = rospy.Publisher('/cmd_vel_mux/input/teleop', Twist, queue_size=10)
@@ -135,6 +126,8 @@ if __name__ == '__main__':
     # 
     import rospy
     rospy.init_node('turtlebot_controller', anonymous=True)
-    explorer = Explorer()
-    explorer.explore()
-    print("Finised exploring, starting vacuuming")
+    tesroo = TesRoo()
+    tesroo.explore()
+    print("TesRoo has finised exploring, starting vacuuming")
+    print("Would you like me to avoid any rooms? If so, please choose from the following options: None, Kitchen, Dining, Bed")
+    tesroo.vacuum()
