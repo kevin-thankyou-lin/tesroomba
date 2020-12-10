@@ -16,17 +16,19 @@ class GridCell:
     def setIsOnFrontier(self, isOnFrontier):
         self.isOnFrontier = isOnFrontier
 
-    def setFrontierClass(self, FrontierClass):
-        self.FrontierClass = FrontierClass
+    def setFrontierClass(self, frontierClass):
+        print("set frontier class to")
+        print(frontierClass)
+        self.frontierClass = frontierClass
 
-    def getXY(self, x, y):
+    def getXY(self):
         return (self.x, self.y)
 
     def getIsOnFrontier(self):
         return self.isOnFrontier
 
     def getFrontierClass(self):
-        return self.FrontierClass
+        return self.frontierClass
 
     def getProb(self):
         return self.prob

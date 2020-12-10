@@ -28,17 +28,17 @@ class TesRoo:
         self.goalID = 0
         self.tf_listener = tf.TransformListener()
 
-        # # Create action client
-        self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
-        rospy.loginfo("Waiting for move_base action server...")
-        wait = self.move_base.wait_for_server(rospy.Duration(10.0))
-        if not wait:
-            rospy.logerr("Action server not available!")
-            rospy.signal_shutdown("Action server not available!")
-            return
-        rospy.loginfo("Connected to move base server")
-        rospy.loginfo("Starting goals achievements ...")
-
+        # # # Create action client
+        # self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+        # rospy.loginfo("Waiting for move_base action server...")
+        # wait = self.move_base.wait_for_server(rospy.Duration(10.0))
+        # if not wait:
+        #     rospy.logerr("Action server not available!")
+        #     rospy.signal_shutdown("Action server not available!")
+        #     return
+        # rospy.loginfo("Connected to move base server")
+        # rospy.loginfo("Starting goals achievements ...")
+    
     def rotate(self):
         twistMsg = Twist() 
         twistMsg.linear.x = 0
@@ -62,11 +62,12 @@ class TesRoo:
 
     def curr_robo_coords(self, world_frame, robo_frame):
         """Return x, y, z of robo w.r.t world_frame"""
+        trans = (0, 0, 0)
         try:
-            (trans, rot) = self.tf_listener.lookupTransform(world_frame, robo_frame, rospy.Time(0))
+            (trans, rot) = self.tf_listener.lookupTransform(world_frame, robo_frame, rospy.Time(0.1))
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             print("Move failed :)")
-
+        print(trans)
         return trans 
 
     def move(self, goal, world_frame):
@@ -78,14 +79,18 @@ class TesRoo:
 
     def explore(self):
         done = False
+        print("exploring")
         while not rospy.is_shutdown() and not done:
-            self.rotate()
-            goal = (goal_x, goal_y) = self.occ_grid.getClosestFrontierCentroidWorld()
+            # self.rotate()
+            curr_x, curr_y, _ = self.curr_robo_coords("odom", "base_link")
+            import ipdb;ipdb.set_trace()
+            (goal_x, goal_y) = self.occ_grid.getClosestFrontierCentroidWorld(curr_x, curr_y)
+            print(self.occ_grid_2d)
+            goal = (goal_x, goal_y)
             self.move(goal)
             done = self.occ_grid.num_frontier_pts < STOPPING_FRONTIER_PTS_NUM
 
     def occgrid_callback(self, grid):
-        import ipdb;ipdb.set_trace()
         print(grid)
 
     def vacuum():
