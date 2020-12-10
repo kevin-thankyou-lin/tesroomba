@@ -1,0 +1,9 @@
+  <launch>
+    
+
+    <node name="trans_broadcaster" pkg = "transform_publisher" type="transform_broadcaster.py" >
+        <param name="static_frame" value="odom" />
+        <param name="dynamic_frame" value="base_link" />
+    </node>
+
+  </launch>
