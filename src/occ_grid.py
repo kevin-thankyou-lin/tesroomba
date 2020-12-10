@@ -1,17 +1,19 @@
-class OccupancyGrid:
+from grid_cell import GridCell
+
+class OccGrid:
     def __init__(self):
         self.isMapLoaded = False
         self.resolution = None
         self.width = None
         self.height = None
         self.origin = None
-        self.occ_grid_2d = None
+        self.occ_grid_2d = []
     
     def loadGridMetadata(self, grid_msg):
-        self.resolution = grid_msg.resolution
-        self.width = grid_msg.width
-        self.height = grid_msg.height
-        self.origin = grid_msg.origin
+        self.resolution = grid_msg.info.resolution
+        self.width = grid_msg.info.width
+        self.height = grid_msg.info.height
+        self.origin = grid_msg.info.origin
         return True
         
     def getResolution(self):
@@ -32,13 +34,27 @@ class OccupancyGrid:
 
     def getNearestFrontierCentroidWorld(self):
         grid_x, grid_y = self.getNearestFrontierCentroid()
-        return self.getNearestFrontierCentroidWorld(grid_y, grid_y)
+        return self.grid2world(grid_y, grid_y)
 
     def getNearestFrontierCentroid(self):
         return
 
     def readOccupancyGrid(self, grid_msg):
-        return
+        self.isMapLoaded = self.loadGridMetadata(grid_msg)
+        assert self.isMapLoaded
+
+        self.occ_grid_2d = []
+        cell_idx = 0
+        for h in range(self.height):
+            width_arr = []
+            for w in range(self.width):
+                map_cell = GridCell(h, w)
+                cell_idx = h * self.width + w
+                map_cell.setProb(grid_msg.data[cell_idx])
+                width_arr.append(map_cell)
+                cell_idx += 1
+
+        return True
 
     def isFrontier(self, x, y):
         return
