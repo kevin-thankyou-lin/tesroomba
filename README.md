@@ -109,6 +109,16 @@ Teleoperation is the same, and you'll also have to modify some of the parameters
 Here are the parameters in **stereo_mapping.launch**:
 
 ```
+
+<launch>
+   <!-- Backward compatibility launch file, use "rtabmap.launch rgbd:=false stereo:=true" instead -->
+
+   <!-- Your camera should be calibrated and publishing rectified left and right
+        images + corresponding camera_info msgs. You can use stereo_image_proc for image rectification.
+        Example:
+           $ roslaunch rtabmap_ros bumblebee.launch -->
+
+  <!-- Choose visualization -->
   <arg name="rtabmapviz"              default="true" />
   <arg name="rviz"                    default="false" />
 
@@ -119,17 +129,17 @@ Here are the parameters in **stereo_mapping.launch**:
   <arg name="rtabmapviz_cfg"          default="$(find rtabmap_ros)/launch/config/rgbd_gui.ini" />
   <arg name="rviz_cfg"                default="$(find rtabmap_ros)/launch/config/rgbd.rviz" />
 
-  <arg name="frame_id"                default="left"/>     <!-- Fixed frame id, you may set "base_link" or "base_footprint" if they are published -->
+  <arg name="frame_id"                default="base_footprint"/>     <!-- Fixed frame id, you may set "base_link" or "base_footprint" if they are published -->
   <arg name="database_path"           default="~/.ros/rtabmap.db"/>
   <arg name="rtabmap_args"            default=""/>   <!-- delete_db_on_start, udebug -->
   <arg name="launch_prefix"           default=""/>
   <arg name="approx_sync"             default="true"/>         <!-- if timestamps of the input topics are not synchronized -->
 
   <arg name="stereo_namespace"        default=""/>
-  <arg name="left_image_topic"        default="/stereo/camera/left/image_rect_color" />
-  <arg name="right_image_topic"       default="/stereo/camera/right/image_rect" />      <!-- using grayscale image for efficiency -->
-  <arg name="left_camera_info_topic"  default="/stereo/camera/left/camera_info" />
-  <arg name="right_camera_info_topic" default="/stereo/camera/right/camera_info" />
+  <arg name="left_image_topic"        default="/stereo/left/image_rect_color" />
+  <arg name="right_image_topic"       default="/stereo/right/image_rect" />      <!-- using grayscale image for efficiency -->
+  <arg name="left_camera_info_topic"  default="/stereo/left/camera_info" />
+  <arg name="right_camera_info_topic" default="/stereo/right/camera_info" />
   <arg name="compressed"              default="false"/>
 
   <arg name="subscribe_scan"          default="false"/>         <!-- Assuming 2D scan if set, rtabmap will do 3DoF mapping instead of 6DoF -->
@@ -145,7 +155,59 @@ Here are the parameters in **stereo_mapping.launch**:
   <arg name="namespace"               default="rtabmap"/>
   <arg name="wait_for_transform"      default="0.2"/>
   <arg name="queue_size"              default="100"/>
+
+  <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+    <arg name="stereo"                  value="true"/>
+    <arg name="rtabmapviz"              value="$(arg rtabmapviz)" />
+    <arg name="rviz"                    value="$(arg rviz)" />
+    <arg name="localization"            value="$(arg localization)"/>
+    <arg name="gui_cfg"                 value="$(arg rtabmapviz_cfg)" />
+    <arg name="rviz_cfg"                value="$(arg rviz_cfg)" />
+
+    <arg name="frame_id"                value="$(arg frame_id)"/>
+    <arg name="namespace"               value="$(arg namespace)"/>
+    <arg name="database_path"           value="$(arg database_path)"/>
+    <arg name="wait_for_transform"      value="$(arg wait_for_transform)"/>
+    <arg name="rtabmap_args"            value="$(arg rtabmap_args)"/>
+    <arg name="launch_prefix"           value="$(arg launch_prefix)"/>
+    <arg name="approx_sync"             value="$(arg approx_sync)"/>
+
+    <arg name="stereo_namespace"        value="$(arg stereo_namespace)"/>
+    <arg name="left_image_topic"        value="$(arg left_image_topic)" />
+    <arg name="right_image_topic"       value="$(arg right_image_topic)" />
+    <arg name="left_camera_info_topic"  value="$(arg left_camera_info_topic)" />
+    <arg name="right_camera_info_topic" value="$(arg right_camera_info_topic)" />
+
+    <arg name="compressed"              value="$(arg compressed)"/>
+
+    <arg name="subscribe_scan"          value="$(arg subscribe_scan)"/>
+    <arg name="scan_topic"              value="$(arg scan_topic)"/>
+
+    <arg name="subscribe_scan_cloud"    value="$(arg subscribe_scan_cloud)"/>
+    <arg name="scan_cloud_topic"        value="$(arg scan_cloud_topic)"/>
+
+    <arg name="visual_odometry"         value="$(arg visual_odometry)"/>
+    <arg name="odom_topic"              value="$(arg odom_topic)"/>
+    <arg name="odom_frame_id"           value="$(arg odom_frame_id)"/>
+    <arg name="odom_args"               value="$(arg rtabmap_args)"/>
+
+    <arg name="queue_size"               value="$(arg queue_size)"/>
+  </include>
+
+</launch>
   ```
+
+12/9/20
+
+# New commands to run:
+export  TURTLEBOT_3D_SENSOR=custom
+roslaunch jump_start turtlebot_world.launch world_file:=$(rospack find jump_start)/worlds/my_world.sdf
+ROS_NAMESPACE=stereo rosrun stereo_ime_proc stereo_image_proc
+
+
+roslaunch rtabmap_ros stereo_mapping.launch
+**Cool but not necessary**
+rosrun image_view stereo_view stereo:stereo image:=image_rect_color
 
 
 
