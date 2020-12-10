@@ -12,6 +12,7 @@ from occ_grid import OccGrid
 import rospy
 import tf2_ros
 import sys
+import tf
 from tf import TransformListener
 
 class Explorer:
@@ -24,15 +25,15 @@ class Explorer:
         self.tf_listener_ = TransformListener()
 
         # # Create action client
-        # self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
-        # rospy.loginfo("Waiting for move_base action server...")
-        # wait = self.move_base.wait_for_server(rospy.Duration(50.0))
-        # if not wait:
-        #     rospy.logerr("Action server not available!")
-        #     rospy.signal_shutdown("Action server not available!")
-        #     return
-        # rospy.loginfo("Connected to move base server")
-        # rospy.loginfo("Starting goals achievements ...")
+        self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+        rospy.loginfo("Waiting for move_base action server...")
+        wait = self.move_base.wait_for_server(rospy.Duration(10.0))
+        if not wait:
+            rospy.logerr("Action server not available!")
+            rospy.signal_shutdown("Action server not available!")
+            return
+        rospy.loginfo("Connected to move base server")
+        rospy.loginfo("Starting goals achievements ...")
 
     def rotate(self):
         twistMsg = Twist() 
@@ -58,7 +59,13 @@ class Explorer:
 
     def move(self, goal):
         """Move to goal"""
-        t = self.tf_listener_.getLatestCommonTime("/base_link", "/map")
+        
+        listener = tf.TransformListener()
+        import ipdb;ipdb.set_trace()
+        try:
+            (trans,rot) = listener.lookupTransform("odom", "base_link", rospy.Time(0))
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+            print("Move failed :)")
         pose = PoseStamped()
         pose.header.frame_id = "map"
         import ipdb;ipdb.set_trace()
@@ -75,7 +82,6 @@ class Explorer:
             # expecting grid world to be updated for me to go planning
             # goal_x, goal_y = self.occ_grid.getNearestFrontierCentroidWorld()
             goal_x, goal_y = -1, -1 # HARDCODED
-
 
             # create Pose
 
