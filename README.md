@@ -54,6 +54,15 @@ To change the sensors being used, instead of custom, put r200, kinect, etc. To c
 camera1 is the left camera.
 camera2 is the right camera
 
+## 12/10/20 
+### Update
+
+Added a new world to simulate a dorm room/office based on the use case. Pulled individual models from https://github.com/chaolmu/gazebo_models_worlds_collection/tree/master/models. To run this world, will need to add `~/.bashrc` file: 
+```
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:<path to this repo>/models
+```
+where `<path to this repo>` is the path after cloning the above repository. 
+
 ## 12/6/20 
 
 ### Update
