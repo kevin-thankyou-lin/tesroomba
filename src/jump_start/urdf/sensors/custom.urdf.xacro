@@ -22,11 +22,11 @@
     <link name="camera_rgb_optical_frame"/>
 
     <joint name="camera_joint1" type="fixed">
-      <origin xyz="0.15 ${custom_cam_py} -0.016" rpy="0 0 0"/>
+      <origin xyz="0.15 ${custom_cam_py} -0.016" rpy="${-M_PI/2} 0 ${-M_PI/2}"/>
       <parent link="camera_rgb_frame"/>
-      <child link="oleft"/>
+      <child link="left"/>
     </joint>
-      <link name="oleft">
+      <link name="left">
       <visual>
        <origin xyz="0 0 0" rpy="0 0 ${M_PI/2}"/>
        <geometry>
@@ -87,11 +87,11 @@
 
 
     <joint name="camera_joint3" type="fixed">
-      <origin xyz="0.15 ${custom_cam_py} -0.016" rpy="-${M_PI/2} 0 -${M_PI/2}"/>
+      <origin xyz="0.15 ${custom_cam_py} -0.016" rpy="0 0 0"/>
       <parent link="camera_rgb_frame"/>
-      <child link="left"/>
+      <child link="oleft"/>
     </joint>
-      <link name="left" />
+      <link name="oleft" />
 
 
 
