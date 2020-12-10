@@ -2,44 +2,26 @@
   <!-- The param file can be used for just parameter server cause modifying stuff here can get dicey. -->
   <rosparam file="$(find our_launch)/params/world_args.yaml" command="load" />
 
-  <!-- Load in another launch file of arguments. -->
-  <include file="$(find our_launch)/launch/multi_tb3_world_args.launch" >
-    <arg name="first_tb3_x_pos" value="$(arg first_tb3_x_pos)"/>
-    <arg name="first_tb3_y_pos" value="$(arg first_tb3_y_pos)"/>
-    <arg name="first_tb3_z_pos" value=" 0.0"/>
-    <arg name="first_tb3_yaw"   value=" 1.57"/>
-
-    <arg name="second_tb3_x_pos" default=" 7.0"/>
-    <arg name="second_tb3_y_pos" default="-1.0"/>
-    <arg name="second_tb3_z_pos" default=" 0.0"/>
-    <arg name="second_tb3_yaw"   default=" 1.57"/>
-
-    <arg name="third_tb3_x_pos" default=" 0.5"/>
-    <arg name="third_tb3_y_pos" default=" 3.0"/>
-    <arg name="third_tb3_z_pos" default=" 0.0"/>
-    <arg name="third_tb3_yaw"   default=" 0.0"/>
-  </include>
-
   <arg name="world_file" default="$(find turtlebot3_gazebo)/worlds/turtlebot3_world.world"/>
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="first_tb3"  default="tb3_0"/>
   <arg name="second_tb3" default="tb3_1"/>
   <arg name="third_tb3"  default="tb3_2"/>
 
-  <arg name="first_tb3_x_pos" default="-7.0"/>
-  <arg name="first_tb3_y_pos" default="-1.0"/>
-  <arg name="first_tb3_z_pos" default=" 0.0"/>
-  <arg name="first_tb3_yaw"   default=" 1.57"/>
+    <arg name="first_tb3_x_pos" value=" 1.5"/>
+    <arg name="first_tb3_y_pos" value=" 1.5"/>
+    <arg name="first_tb3_z_pos" value=" 0.0"/>
+    <arg name="first_tb3_yaw"   value=" 1.57"/>
 
-  <arg name="second_tb3_x_pos" default=" 7.0"/>
-  <arg name="second_tb3_y_pos" default="-1.0"/>
-  <arg name="second_tb3_z_pos" default=" 0.0"/>
-  <arg name="second_tb3_yaw"   default=" 1.57"/>
+    <arg name="second_tb3_x_pos" default="-1.5"/>
+    <arg name="second_tb3_y_pos" default=" 1.5"/>
+    <arg name="second_tb3_z_pos" default=" 0.0"/>
+    <arg name="second_tb3_yaw"   default=" 1.57"/>
 
-  <arg name="third_tb3_x_pos" default=" 0.5"/>
-  <arg name="third_tb3_y_pos" default=" 3.0"/>
-  <arg name="third_tb3_z_pos" default=" 0.0"/>
-  <arg name="third_tb3_yaw"   default=" 0.0"/>
+    <arg name="third_tb3_x_pos" default=" 1.5"/>
+    <arg name="third_tb3_y_pos" default="-1.5"/>
+    <arg name="third_tb3_z_pos" default=" 0.0"/>
+    <arg name="third_tb3_yaw"   default=" 0.0"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(arg world_file)"/>
