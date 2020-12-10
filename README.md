@@ -201,13 +201,19 @@ Here are the parameters in **stereo_mapping.launch**:
 
 # New commands to run:
 export  TURTLEBOT_3D_SENSOR=custom
+
 roslaunch jump_start turtlebot_world.launch world_file:=$(rospack find jump_start)/worlds/my_world.sdf
-ROS_NAMESPACE=stereo rosrun stereo_ime_proc stereo_image_proc
+
+ROS_NAMESPACE=stereo rosrun stereo_image_proc stereo_image_proc
 
 
 roslaunch rtabmap_ros stereo_mapping.launch
+
 **Cool but not necessary**
+
 rosrun image_view stereo_view stereo:stereo image:=image_rect_color
+
+configuration of rtabmapviz is in jump_start/src
 
 
 
