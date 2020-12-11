@@ -16,30 +16,35 @@ import tf
 
 import matplotlib.pyplot as plt
 
-WORLD_FRAME = "odom"
+WORLD_FRAME = "odom" # world frame is the odom frame - map from moves w.r.t to the move frame!
+ROBOT_FRAME = "base_link"
+
 STOPPING_FRONTIER_PTS_NUM = 5
+ROTATE_TIME = 0
 
 class TesRoo:
     def __init__(self, angular_vel=0.2):
         self.occ_grid = OccGrid()
         self.pub = rospy.Publisher('/cmd_vel_mux/input/teleop', Twist, queue_size=10)
-        self.sub = rospy.Subscriber('/map', OccupancyGrid, self.occ_grid.readOccupancyGrid, queue_size=10)
+        self.sub = rospy.Subscriber('/map', OccupancyGrid, self.updateGrid, queue_size=10)
         self.angular_vel = angular_vel
         self.goalID = 0
-        self.tf_listener = tf.TransformListener()
 
-        # # # Create action client
-        # self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
-        # rospy.loginfo("Waiting for move_base action server...")
-        # wait = self.move_base.wait_for_server(rospy.Duration(10.0))
-        # if not wait:
-        #     rospy.logerr("Action server not available!")
-        #     rospy.signal_shutdown("Action server not available!")
-        #     return
-        # rospy.loginfo("Connected to move base server")
-        # rospy.loginfo("Starting goals achievements ...")
+        self.tf_buffer = tf2_ros.Buffer()
+        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
+        self.occ_grid.tf_buffer = self.tf_buffer
+        self.occ_grid.tf_buffer = self.tf_buffer
+
     
-    def rotate(self):
+    def updateGrid(self, grid_msg):
+        print("info")
+        print(grid_msg.info)
+        print("header")
+        print(grid_msg.header)
+
+        self.occ_grid.readOccupancyGrid(grid_msg)
+
+    def rotate(self, length):
         twistMsg = Twist() 
         twistMsg.linear.x = 0
         twistMsg.linear.y = 0
@@ -48,7 +53,7 @@ class TesRoo:
         twistMsg.angular.y = 0
         twistMsg.angular.z = self.angular_vel    # set angular velocity
 
-        end_t = rospy.Time.now() + rospy.Duration(10)
+        end_t = rospy.Time.now() + rospy.Duration(length)
 
         print("start rotating")
         while not rospy.is_shutdown() and rospy.Time.now() < end_t: 
@@ -62,18 +67,21 @@ class TesRoo:
 
     def curr_robo_coords(self, world_frame, robo_frame):
         """Return x, y, z of robo w.r.t world_frame"""
-        trans = (0, 0, 0)
+        trans = None
         try:
-            (trans, rot) = self.tf_listener.lookupTransform(world_frame, robo_frame, rospy.Time(0.1))
-        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-            print("Move failed :)")
-        print(trans)
+            trans = self.tf_buffer.lookup_transform(world_frame, robo_frame, rospy.Time())
+            (trans, rot) = (trans.transform.translation, trans.transform.rotation)
+        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+            print("Failed to get curr robo coords ")
+
+        
         return trans 
 
-    def move(self, goal, world_frame):
+    def move(self, goal, robot_frame, world_frame):
         """Move to goal, where goal is specified w.r.t the world frame"""
 
-        robo_x, robo_y, _ = self.curr_robo_coords("odom", "base_link")
+        # origin_x_world, origin_x_world = 
+        robo_x_world, robo_y_world, _ = self.curr_robo_coords(world_frame, robot_frame)
         # get a bunch of waypoints using A* on the instantaneous occupancy grid
 
 
@@ -81,14 +89,21 @@ class TesRoo:
         done = False
         print("exploring")
         while not rospy.is_shutdown() and not done:
-            # self.rotate()
-            curr_x, curr_y, _ = self.curr_robo_coords("odom", "base_link")
-            import ipdb;ipdb.set_trace()
-            (goal_x, goal_y) = self.occ_grid.getClosestFrontierCentroidWorld(curr_x, curr_y)
-            print(self.occ_grid_2d)
-            goal = (goal_x, goal_y)
-            self.move(goal)
-            done = self.occ_grid.num_frontier_pts < STOPPING_FRONTIER_PTS_NUM
+            self.rotate(ROTATE_TIME)
+            robo_coords_odom = self.curr_robo_coords(WORLD_FRAME, ROBOT_FRAME) # odom frame is world frame
+            while not robo_coords:
+                print("Robo coords not neceived yet")
+                rospy.sleep(1)
+                robo_coords_odom = self.curr_robo_coords(WORLD_FRAME, ROBOT_FRAME) # odom frame is world frame
+
+            while not self.occ_grid.mapLoaded():
+                print("Map not neceived yet")
+                rospy.sleep(1)
+
+            goal = self.occ_grid.getClosestFrontierCentroidOdom(robo_coords_odom.x, robo_coords_odom.y)
+            rospy.sleep(5)
+            # self.move(goal, WORLD_FRAME)
+            # done = self.occ_grid.num_frontier_pts < STOPPING_FRONTIER_PTS_NUM
 
     def occgrid_callback(self, grid):
         print(grid)
@@ -96,8 +111,8 @@ class TesRoo:
     def vacuum():
         pub = rospy.Publisher('/cmd_vel_mux/input/teleop', Twist, queue_size=10)
         sub = rospy.Subscriber('/rtabmap/octomap_grid', OccupancyGrid, occgrid_callback, queue_size=10)
-        tfBuffer = tf2_ros.Buffer()
-        tfListener = tf2_ros.TransformListener(tfBuffer)
+        # tfBuffer = tf2_ros.Buffer()
+        # tfListener = tf2_ros.TransformListener(tfBuffer)
         # Create a timer object that will sleep long enough to result in
         # a 10Hz publishing rate
         r = rospy.Rate(10) # 10hz
