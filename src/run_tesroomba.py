@@ -19,6 +19,7 @@ import tf
 
 import matplotlib.pyplot as plt
 import networkx as nx 
+from heapq import heapq
 
 from math import atan2, sin, cos, pow, sqrt
 
@@ -100,7 +101,40 @@ class TesRoo:
         # robo_coords_odom, _ = self.curr_robo_pose(world_frame, robot_frame)
         # get a bunch of waypoints using A* on the instantaneous occupancy grid
         # @Neha                             @Neha                          @Neha                        @Neha
+
+
         self.moveTo(goal, world_frame, robot_frame)
+
+        curr = self.curr_robo_pose(world_frame,robot_frame) # need to double check with kevin
+        heap = [(self.occ_grid.l2_distance(curr, goal), 0, curr, [curr])]
+        # create mapping to see element is still currently in the heap 
+        # if it is, then we need to replace it
+
+        mapping = {curr: heap[0]}
+        curr_path = [curr]
+        while heap and curr != goal: 
+            curr_pair = heapq.heappop(heap)
+            curr = curr_pair[2]
+            curr.setVacummed() 
+            neighbor = self.occ_grid.getNeighbors(curr_pair[2].getH(), curr_pair[2].getW())
+            for i in neighbor: 
+                if not i.getVacummed(): 
+                    dist = self.occ_grid.l2_distance(curr, goal)
+                    from_start = curr_pair[1] + 1 
+                    heur = from_start + dist
+                    curr_path = curr_pair[3] + [i]
+                    if i in mapping and mapping[i][0] > heur: 
+                        mapping[i][0] = heur
+                        mapping[i][1] = from_start
+                        mapping[i][2] = i
+                        mapping[i][3] = curr_path 
+                        heapq.heapify(heap)
+                    else: 
+                        heapq.heappush(heap, (heur, from_start + 1, i, curr_path))
+        return curr_path 
+
+
+        #self.occ_grid.getNeighbors()
         # waypoints = self.get_waypoints()
         # for wp in waypoints:
         #     self.moveTo(wp, world_frame, robo_frame)
