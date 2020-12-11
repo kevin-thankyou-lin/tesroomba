@@ -224,7 +224,32 @@ rosrun image_view stereo_view stereo:stereo image:=image_rect_color
 
 configuration of rtabmapviz is in jump_start/src
 
+12/11/20 - The final day
 
+# New commands to run for laser scanning:
+export  TURTLEBOT_3D_SENSOR=kinetic
+
+roslaunch jump_start turtlebot_world.launch world_file:=$(rospack find jump_start)/worlds/my_world.sdf
+
+(Launch the world: delete the table for better vacuuming)
+
+roslaunch jump_start gmapping.launch
+
+(Launch gmapping)
+
+python ~/tesroomba/src/run_tesroomba.py
+
+(Run TesRoo: explore, query user, vacuum)
+
+
+**TODO**
+
+Write A* on the 2D occupancy grid @Neha look at my vacuum() function for inspiration. I'm 
+moving to the node that I pop out from the stack. I'll be back to finish up things and presentation slides :)
+
+The actual A* implementation is used around line 92 of `run_tesroomba.py`. We use A* to get a path 
+(under the hood, this is a list of grid cells) from robo's current location to the target location.
+Then, we uniformly pick some points as way points and pass each way point to the `moveTo()` function.
 
 
 

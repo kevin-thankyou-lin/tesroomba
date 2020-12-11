@@ -213,7 +213,7 @@ if __name__ == '__main__':
     import rospy
     rospy.init_node('turtlebot_controller', anonymous=True)
     tesroo = TesRoo()
-    # tesroo.explore()
+    tesroo.explore()
     print("TesRoo has finised exploring, starting vacuuming")
     print("Would you like me to avoid any rooms? If so, please choose from the following options: None, Kitchen, Dining, Bed")
     tesroo.vacuum()
