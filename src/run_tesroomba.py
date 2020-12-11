@@ -15,18 +15,26 @@ import sys
 import tf
 
 import matplotlib.pyplot as plt
+import networkx as nx 
+
+from math import atan2, sin, cos, pow, sqrt
+
 
 WORLD_FRAME = "odom" # world frame is the odom frame - map from moves w.r.t to the move frame!
 ROBOT_FRAME = "base_link"
 
-STOPPING_FRONTIER_PTS_NUM = 5
-ROTATE_TIME = 0
+STOPPING_FRONTIER_PTS_NUM = 20
+ROTATE_TIME = 5
+MAX_DIST_PER_WAYPOINT = 0.5 # this is in meters
+ROTATION_VELOCITY = 0.5
 
 class TesRoo:
-    def __init__(self, angular_vel=0.2):
+    def __init__(self, angular_vel=ROTATION_VELOCITY):
         self.occ_grid = OccGrid()
+        self.free_graph = nx.Graph()
         self.pub = rospy.Publisher('/cmd_vel_mux/input/teleop', Twist, queue_size=10)
-        self.sub = rospy.Subscriber('/map', OccupancyGrid, self.updateGrid, queue_size=10)
+        self.sub = rospy.Subscriber('/map', OccupancyGrid, self.updateDataStructures, queue_size=10)
+        self.pose_sub = rospy.Subscriber('/map', OccupancyGrid, self.updateDataStructures, queue_size=10)
         self.angular_vel = angular_vel
         self.goalID = 0
 
@@ -35,8 +43,7 @@ class TesRoo:
         self.occ_grid.tf_buffer = self.tf_buffer
         self.occ_grid.tf_buffer = self.tf_buffer
 
-    
-    def updateGrid(self, grid_msg):
+    def updateDataStructures(self, grid_msg):
         print("info")
         print(grid_msg.info)
         print("header")
@@ -56,65 +63,117 @@ class TesRoo:
         end_t = rospy.Time.now() + rospy.Duration(length)
 
         print("start rotating")
+        rate = rospy.Rate(10)
         while not rospy.is_shutdown() and rospy.Time.now() < end_t: 
             self.pub.publish(twistMsg)
-        # stop rotation
+            rate.sleep()
+
         twistMsg.angular.z = 0
         self.pub.publish(twistMsg)
         print("finish rotating")
 
         return True
 
-    def curr_robo_coords(self, world_frame, robo_frame):
+    def curr_robo_pose(self, world_frame, robo_frame):
         """Return x, y, z of robo w.r.t world_frame"""
-        trans = None
-        try:
-            trans = self.tf_buffer.lookup_transform(world_frame, robo_frame, rospy.Time())
-            (trans, rot) = (trans.transform.translation, trans.transform.rotation)
-        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-            print("Failed to get curr robo coords ")
+        r = rospy.Rate(10)
+        while not rospy.is_shutdown():
+            try:
+                trans = self.tf_buffer.lookup_transform(world_frame, robo_frame, rospy.Time())
+                return (trans.transform.translation, trans.transform.rotation)
+            except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+                print("Failed to get curr robo coords ")
+                r.sleep()
 
+
+    def goToGoal(self, goal, world_frame, robot_frame):
+        """Move to goal, where goal is specified w.r.t the world frame
         
-        return trans 
-
-    def move(self, goal, robot_frame, world_frame):
-        """Move to goal, where goal is specified w.r.t the world frame"""
+        This goal is a longer goal so we create a list of waypoints for tesroo to hit"""
 
         # origin_x_world, origin_x_world = 
-        robo_x_world, robo_y_world, _ = self.curr_robo_coords(world_frame, robot_frame)
+        # self.update_graph(self.occ_grid)
+        # robo_coords_odom, _ = self.curr_robo_pose(world_frame, robot_frame)
         # get a bunch of waypoints using A* on the instantaneous occupancy grid
+        self.moveTo(goal, world_frame, robot_frame)
+        # waypoints = self.get_waypoints()
+        # for wp in waypoints:
+        #     self.moveTo(wp, world_frame, robo_frame)
+
+    def moveTo(self, target, world_frame, robot_frame):
+        """Take Tesroo from its current position to target take a straight line 
+        First, we rotate to orient ourselves in the correct direction. 
+        Then, we drive straight until we're there
+
+        @Params
+        target: tuple
+        """    
+        r = rospy.Rate(4)
+        move_forward = False 
+
+        while not rospy.is_shutdown():
+            robo_coords_odom, robo_rot = self.curr_robo_pose(world_frame, robot_frame)
+            target_x, target_y = target
+            curr_x, curr_y = robo_coords_odom.x, robo_coords_odom.y
+
+            (roll, pitch, theta) = tf.transformations.euler_from_quaternion([robo_rot.x, robo_rot.y, robo_rot.z, robo_rot.w])
+            
+            inc_x = target_x - curr_x 
+            inc_y = target_y - curr_y 
+
+            angle_to_goal = atan2(inc_y, inc_x) 
+            dist = sqrt(pow(inc_x, 2) + pow(inc_y, 2))      #calculate distance
+            turn = atan2(sin(angle_to_goal - theta), cos(angle_to_goal - theta))
+
+            if dist < 0.1:
+                return
+            
+            if abs(angle_to_goal - theta) < 0.1:    #0.1 because it too exact for a robot if both angles should be exactly 0
+                move_forward = True
+
+            control_command = Twist() 
+            control_command.angular.z = 0.2 * turn
+
+            if move_forward == True:
+                #keep speed between 0.3 and 0.7
+                if 0.1 * dist > 0.3 and 0.1 * dist < 0.7:
+                    control_command.linear.x = 0.05 * dist
+                elif 0.1 * dist > 0.7:
+                    control_command.linear.x = 0.7
+                else:
+                    control_command.linear.x = 0.3
+
+            self.pub.publish(control_command)
+            r.sleep()
 
 
     def explore(self):
         done = False
         print("exploring")
+        r1 = rospy.Rate(10) # 10hz
         while not rospy.is_shutdown() and not done:
             self.rotate(ROTATE_TIME)
-            robo_coords_odom = self.curr_robo_coords(WORLD_FRAME, ROBOT_FRAME) # odom frame is world frame
-            while not robo_coords:
-                print("Robo coords not neceived yet")
-                rospy.sleep(1)
-                robo_coords_odom = self.curr_robo_coords(WORLD_FRAME, ROBOT_FRAME) # odom frame is world frame
-
+            robo_coords_odom, _ = self.curr_robo_pose(WORLD_FRAME, ROBOT_FRAME) # odom frame is world frame
+            r2 = rospy.Rate(10) # 10hz
             while not self.occ_grid.mapLoaded():
                 print("Map not neceived yet")
-                rospy.sleep(1)
+                r2.sleep()
 
-            goal = self.occ_grid.getClosestFrontierCentroidOdom(robo_coords_odom.x, robo_coords_odom.y)
-            rospy.sleep(5)
-            # self.move(goal, WORLD_FRAME)
-            # done = self.occ_grid.num_frontier_pts < STOPPING_FRONTIER_PTS_NUM
+            goal = self.occ_grid.getClosestFrontier(robo_coords_odom.x, robo_coords_odom.y)
+            r1.sleep()
+
+            self.goToGoal(goal, WORLD_FRAME, ROBOT_FRAME)
+            done = self.occ_grid.num_frontier_pts < STOPPING_FRONTIER_PTS_NUM
 
     def occgrid_callback(self, grid):
         print(grid)
 
     def vacuum():
-        pub = rospy.Publisher('/cmd_vel_mux/input/teleop', Twist, queue_size=10)
-        sub = rospy.Subscriber('/rtabmap/octomap_grid', OccupancyGrid, occgrid_callback, queue_size=10)
+       
         # tfBuffer = tf2_ros.Buffer()
         # tfListener = tf2_ros.TransformListener(tfBuffer)
         # Create a timer object that will sleep long enough to result in
-        # a 10Hz publishing rate
+        # a 10Hz publishing Rate
         r = rospy.Rate(10) # 10hz
 
         K1 = 0.3
@@ -125,8 +184,8 @@ class TesRoo:
             #TODO: Replace 'SOURCE FRAME' and 'TARGET FRAME' with the appropriate TF frame names.
             # trans = tfBuffer.lookup_transform(robot_frame, target_frame, rospy.Time())
             # Process trans to get your state error
-            # Generate a control command to send to the robot
-                control_command = Twist() #TODO: Generate this
+            # GeneRate a control command to send to the robot
+                control_command = Twist() #TODO: GeneRate this
                 control_command.linear.x = 0.2
                 # control_command.linear.y = 0.1
 
@@ -136,7 +195,7 @@ class TesRoo:
                 pub.publish(control_command)
             except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
                 pass
-            # Use our rate object to sleep until it is time to publish again
+            # Use our Rate object to sleep until it is time to publish again
             r.sleep()
 
 

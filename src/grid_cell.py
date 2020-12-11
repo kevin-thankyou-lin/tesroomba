@@ -1,14 +1,14 @@
 class GridCell:
-    def __init__(self, x=None, y=None, prob=-1, isOnFrontier=False, frontierClass=None):
-        self.x = x
-        self.y = y
+    def __init__(self, h=None, w=None, prob=-1, isOnFrontier=False, frontierClass=None):
+        self.h = h
+        self.w = w
         self.prob = prob
         self.isOnFrontier = isOnFrontier
         self.frontierClass = frontierClass
     
-    def setXY(self, x, y):
-        self.x = x
-        self.y = y
+    def setHW(self, h, w):
+        self.h = h
+        self.w = w
 
     def setProb(self, prob):
         self.prob = prob
@@ -19,14 +19,14 @@ class GridCell:
     def setFrontierClass(self, frontierClass):
         self.frontierClass = frontierClass
 
-    def getXY(self):
-        return (self.x, self.y)
+    def getHW(self):
+        return (self.h, self.w)
     
-    def getX(self):
-        return self.x
+    def getH(self):
+        return self.h
 
-    def getY(self):
-        return self.y
+    def getW(self):
+        return self.w
 
     def getIsOnFrontier(self):
         return self.isOnFrontier
