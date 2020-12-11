@@ -1,3 +1,5 @@
+from collections import deque
+
 # from Collections import deque
 from std_msgs.msg import Header
 # from geometry_msgs.msg import PoseStamped
@@ -8,6 +10,7 @@ from actionlib_msgs.msg import *
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from occ_grid import OccGrid
+
 
 import rospy
 import tf2_ros
@@ -34,7 +37,7 @@ class TesRoo:
         self.free_graph = nx.Graph()
         self.pub = rospy.Publisher('/cmd_vel_mux/input/teleop', Twist, queue_size=10)
         self.sub = rospy.Subscriber('/map', OccupancyGrid, self.updateDataStructures, queue_size=10)
-        self.pose_sub = rospy.Subscriber('/map', OccupancyGrid, self.updateDataStructures, queue_size=10)
+        
         self.angular_vel = angular_vel
         self.goalID = 0
 
@@ -45,9 +48,9 @@ class TesRoo:
 
     def updateDataStructures(self, grid_msg):
         print("info")
-        print(grid_msg.info)
+        # print(grid_msg.info)
         print("header")
-        print(grid_msg.header)
+        # print(grid_msg.header)
 
         self.occ_grid.readOccupancyGrid(grid_msg)
 
@@ -88,13 +91,15 @@ class TesRoo:
 
     def goToGoal(self, goal, world_frame, robot_frame):
         """Move to goal, where goal is specified w.r.t the world frame
-        
+        @Params
+        goal : tuple (int, int)
+        world_frame: use WORLD_FRAME global variable
+        robot_frame: use ROBOT_FRAME global variable
         This goal is a longer goal so we create a list of waypoints for tesroo to hit"""
 
-        # origin_x_world, origin_x_world = 
-        # self.update_graph(self.occ_grid)
         # robo_coords_odom, _ = self.curr_robo_pose(world_frame, robot_frame)
         # get a bunch of waypoints using A* on the instantaneous occupancy grid
+        # @Neha                             @Neha                          @Neha                        @Neha
         self.moveTo(goal, world_frame, robot_frame)
         # waypoints = self.get_waypoints()
         # for wp in waypoints:
@@ -168,36 +173,38 @@ class TesRoo:
     def occgrid_callback(self, grid):
         print(grid)
 
-    def vacuum():
-       
-        # tfBuffer = tf2_ros.Buffer()
-        # tfListener = tf2_ros.TransformListener(tfBuffer)
-        # Create a timer object that will sleep long enough to result in
-        # a 10Hz publishing Rate
-        r = rospy.Rate(10) # 10hz
+    def vacuum(self):
+        print("start vacuuming")
+        self.rotate(ROTATE_TIME)
+        r2 = rospy.Rate(10) # 10hz
+        while not self.occ_grid.mapLoaded():
+            print("Map not neceived yet")
+            r2.sleep()
+        
+        robo_coords_odom, robo_rot = self.curr_robo_pose(WORLD_FRAME, ROBOT_FRAME)
 
-        K1 = 0.3
-        K2 = 1
-        # Loop until the node is killed with Ctrl-C
-        while not rospy.is_shutdown():
-            try:
-            #TODO: Replace 'SOURCE FRAME' and 'TARGET FRAME' with the appropriate TF frame names.
-            # trans = tfBuffer.lookup_transform(robot_frame, target_frame, rospy.Time())
-            # Process trans to get your state error
-            # GeneRate a control command to send to the robot
-                control_command = Twist() #TODO: GeneRate this
-                control_command.linear.x = 0.2
-                # control_command.linear.y = 0.1
+        free_cells = []
+        occ_grid_2d = self.occ_grid.occ_grid_2d
 
-                # control_command.angular.z = K2 * (trans.transform.translation.y)
-
-                #################################### end your code ###############
-                pub.publish(control_command)
-            except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-                pass
-            # Use our Rate object to sleep until it is time to publish again
-            r.sleep()
-
+        for h in range(self.occ_grid.getHeight()):
+            for w in range(self.occ_grid.getWidth()):
+                if occ_grid_2d[h][w].getProb() == 0:
+                    free_cells.append(occ_grid_2d[h][w])
+        
+        for free_cell in free_cells:
+            stk = [free_cell]
+            while stk:
+                curr_cell = stk.pop()
+                curr_cell.setVacummed()
+                goal_x_map, goal_y_map = self.occ_grid.grid2Map((curr_cell.getH(), curr_cell.getW()))
+                goal_x_odom, goal_y_odom = self.occ_grid.map2Odom((goal_x_map, goal_y_map))
+                self.goToGoal((goal_x_odom, goal_y_odom), WORLD_FRAME, ROBOT_FRAME)
+                print("goals", (goal_x_odom, goal_y_odom))
+                neighbors = self.occ_grid.getNeighbors(curr_cell.getH(), curr_cell.getW())
+                for nei in neighbors:
+                    if not nei.getVacummed():
+                        stk.append(nei)
+        
 
 
 if __name__ == '__main__':
@@ -206,7 +213,8 @@ if __name__ == '__main__':
     import rospy
     rospy.init_node('turtlebot_controller', anonymous=True)
     tesroo = TesRoo()
-    tesroo.explore()
+    # tesroo.explore()
     print("TesRoo has finised exploring, starting vacuuming")
     print("Would you like me to avoid any rooms? If so, please choose from the following options: None, Kitchen, Dining, Bed")
     tesroo.vacuum()
+    print("hi")

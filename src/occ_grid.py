@@ -241,6 +241,15 @@ class OccGrid:
         map_y = origin_y + h * self.resolution # not sure how grid_x and grid_y are relative to origin?
         return (map_x, map_y)
     
+    def map2Odom(self, map_coords):
+        """
+        Return the odom coords of map coords
+        Both params are tuples of doubles
+        """
+        map_wrt_odom = self.tf_translate('map', 'odom')
+        x_odom, y_odom = map_wrt_odom.x + map_coords[0], map_wrt_odom.y + map_coords[1]
+        return x_odom, y_odom
+
     def tf_translate(self, frame1, frame2):
         """For tf frames frame1 and frame2, get frame1's origin w.r.t to frame2"""
         tf_buffer = tf2_ros.Buffer()

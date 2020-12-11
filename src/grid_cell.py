@@ -5,10 +5,17 @@ class GridCell:
         self.prob = prob
         self.isOnFrontier = isOnFrontier
         self.frontierClass = frontierClass
+        self.vacuumed = False
     
     def setHW(self, h, w):
         self.h = h
         self.w = w
+
+    def getVacummed(self):
+        return self.vacuumed
+
+    def setVacummed(self):
+        self.vacuumed = True
 
     def setProb(self, prob):
         self.prob = prob
