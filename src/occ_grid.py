@@ -250,6 +250,17 @@ class OccGrid:
         x_odom, y_odom = map_wrt_odom.x + map_coords[0], map_wrt_odom.y + map_coords[1]
         return x_odom, y_odom
 
+    def odom2Map(self, odom_coords):
+        """
+        Return the odom coords of map coords
+        Both params are tuples of doubles
+        """
+        odom_wrt_map = self.tf_translate('odom', 'map')
+        print(odom_coords[0])
+        print(type(odom_coords[0]))
+        x_map, y_map = odom_wrt_map.x + odom_coords[0], odom_wrt_map.y + odom_coords[1]
+        return x_map, y_map
+
     def tf_translate(self, frame1, frame2):
         """For tf frames frame1 and frame2, get frame1's origin w.r.t to frame2"""
         tf_buffer = tf2_ros.Buffer()

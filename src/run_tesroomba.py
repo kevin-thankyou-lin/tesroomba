@@ -19,7 +19,7 @@ import tf
 
 import matplotlib.pyplot as plt
 import networkx as nx 
-from heapq import heapq
+import heapq
 
 from math import atan2, sin, cos, pow, sqrt
 
@@ -28,7 +28,7 @@ WORLD_FRAME = "odom" # world frame is the odom frame - map from moves w.r.t to t
 ROBOT_FRAME = "base_link"
 
 STOPPING_FRONTIER_PTS_NUM = 20
-ROTATE_TIME = 5
+ROTATE_TIME = 3
 MAX_DIST_PER_WAYPOINT = 0.5 # this is in meters
 ROTATION_VELOCITY = 0.5
 
@@ -104,39 +104,49 @@ class TesRoo:
 
 
         self.moveTo(goal, world_frame, robot_frame)
-
-        curr = self.curr_robo_pose(world_frame,robot_frame) # need to double check with kevin
-        heap = [(self.occ_grid.l2_distance(curr, goal), 0, curr, [curr])]
-        # create mapping to see element is still currently in the heap 
-        # if it is, then we need to replace it
-
-        mapping = {curr: heap[0]}
-        curr_path = [curr]
-        while heap and curr != goal: 
-            curr_pair = heapq.heappop(heap)
-            curr = curr_pair[2]
-            curr.setVacummed() 
-            neighbor = self.occ_grid.getNeighbors(curr_pair[2].getH(), curr_pair[2].getW())
-            for i in neighbor: 
-                if not i.getVacummed(): 
-                    dist = self.occ_grid.l2_distance(curr, goal)
-                    from_start = curr_pair[1] + 1 
-                    heur = from_start + dist
-                    curr_path = curr_pair[3] + [i]
-                    if i in mapping and mapping[i][0] > heur: 
-                        mapping[i][0] = heur
-                        mapping[i][1] = from_start
-                        mapping[i][2] = i
-                        mapping[i][3] = curr_path 
-                        heapq.heapify(heap)
-                    else: 
-                        heapq.heappush(heap, (heur, from_start + 1, i, curr_path))
-        return curr_path 
+        # import ipdb;ipdb.set_trace()
+        # transl, rot = self.curr_robo_pose(world_frame,robot_frame) # need to double check with kevin
+        # curr = self.occ_grid.odom2Map((transl.x, transl.y))
+        # curr = self.occ_grid.map2Grid(curr)
+        # curr = self.occ_grid.occ_grid_2d[curr[0]][curr[1]]
+        # goal = self.occ_grid.odom2Map(goal)
+        # goal = self.occ_grid.map2Grid(goal)    
+        # goal = self.occ_grid.occ_grid_2d[goal[0]][goal[1]]
 
 
-        #self.occ_grid.getNeighbors()
-        # waypoints = self.get_waypoints()
+        # heap = [(self.occ_grid.l2_distance(curr.getHW(), goal.getHW()), 0, curr, [curr])]
+        # # create mapping to see element is still currently in the heap 
+        # # if it is, then we need to replace it
+
+        # mapping = {curr: heap[0]}
+        # curr_path = [curr]
+        # while heap and self.occ_grid.l2_distance(curr.getHW(), goal.getHW()) < 0.2 and not rospy.is_shutdown: 
+        #     curr_pair = heapq.heappop(heap)
+        #     curr = curr_pair[2]
+        #     curr.setVacummed() 
+        #     neighbor = self.occ_grid.getNeighbors(curr_pair[2].getH(), curr_pair[2].getW())
+            
+        #     for i in neighbor: 
+        #         if not i.getVacummed(): 
+        #             dist = self.occ_grid.l2_distance(curr.getHW(), goal.getHW())
+        #             from_start = curr_pair[1] + 1 
+        #             heur = from_start + dist
+        #             curr_path = curr_pair[3] + [i]
+        #             if i in mapping and mapping[i][0] > heur: 
+        #                 mapping[i][0] = heur
+        #                 mapping[i][1] = from_start
+        #                 mapping[i][2] = i
+        #                 mapping[i][3] = curr_path 
+        #                 heapq.heapify(heap)
+        #             else: 
+        #                 heapq.heappush(heap, (heur, from_start + 1, i, curr_path))
+        
+        # waypoints = [curr_path[i] for i in range(0, len(curr_path), 7)]
+
         # for wp in waypoints:
+        #     wp = wp.getHW()
+        #     wp = self.occ_grid.grid2Map()
+        #     wp = self.occ_grid.map2Odom()
         #     self.moveTo(wp, world_frame, robo_frame)
 
     def moveTo(self, target, world_frame, robot_frame):
@@ -247,7 +257,7 @@ if __name__ == '__main__':
     import rospy
     rospy.init_node('turtlebot_controller', anonymous=True)
     tesroo = TesRoo()
-    tesroo.explore()
+    tesroo.vacuum()
     print("TesRoo has finised exploring, starting vacuuming")
     print("Would you like me to avoid any rooms? If so, please choose from the following options: None, Kitchen, Dining, Bed")
     tesroo.vacuum()
